@@ -44,6 +44,12 @@ def edit_product_post(request, id):
         item.save()
         return redirect(productlistview)
 
+def products_filtered(request, id):
+    productlist = Product.objects.all()
+    filteredproducts = productlist.filter(supplier = id)
+    context = {'products': filteredproducts}
+    return render (request,"productlist.html",context)
+
 
 
 
@@ -71,4 +77,26 @@ def confirmdeletesupplier(request, id):
 
 def deletesupplier(request, id):
     Supplier.objects.get(id = id).delete()
-    return redirect(supplierlistview)    
+    return redirect(supplierlistview)
+
+def edit_supplier_get(request, id):
+        supplier = Supplier.objects.get(id = id)
+        context = {'supplier': supplier}
+        return render (request,"edit_supplier.html",context)
+
+
+def edit_supplier_post(request, id):
+        item = Supplier.objects.get(id = id)
+        item.contactname = request.POST['contact name']
+        item.address = request.POST['address']
+        item.phone = request.POST['phone']
+        item.email = request.POST['email']
+        item.country = request.POST['country']
+        item.save()
+        return redirect(supplierlistview)
+
+def searchsuppliers(request):
+    search = request.POST['search']
+    filtered = Supplier.objects.filter(companyname__icontains=search)
+    context = {'suppliers': filtered}
+    return render (request,"supplierlist.html",context)
