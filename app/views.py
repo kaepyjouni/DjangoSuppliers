@@ -1,15 +1,41 @@
 from django.shortcuts import render, redirect
 from .models import Supplier, Product
+from django.contrib.auth import authenticate, login, logout
 
-def landingview(request):
-    return render(request, 'landingpage.html')
+# LANDING AFTER LOGIN
+
+# def landingview(request):
+#     return render(request, 'landingpage.html')
+
+# LOGIN AND LOGOUT
+
+def loginview(request):
+    return render(request, 'loginpage.html')
+
+def login_action(request):
+    user = request.POST['username']
+    passw = request.POST['password']
+    user = authenticate(username = user, password = passw)
+    if user:
+        login(request, user)
+        context = {'name': user}
+        return render(request, 'landingpage.html', context)
+    else:
+        return render(request, 'loginerror.html')
+
+def logout_action(request):
+    logout(request)
+    return render(request, 'loginpage.html')
 
 # Product views
 def productlistview(request):
-    productlist = Product.objects.all()
-    supplierlist = Supplier.objects.all()
-    context = {'products': productlist, 'suppliers': supplierlist}
-    return render(request, 'productlist.html', context)
+    if not request.user.is_authenticated:
+        return render(request, 'loginpage.html')
+    else:
+        productlist = Product.objects.all()
+        supplierlist = Supplier.objects.all()
+        context = {'products': productlist, 'suppliers': supplierlist}
+        return render(request, 'productlist.html', context)
 
 def addproduct(request):
     a = request.POST['productname']
@@ -55,9 +81,12 @@ def products_filtered(request, id):
 
 # Supplier views
 def supplierlistview(request):
-    supplierlist = Supplier.objects.all()
-    context = {'suppliers': supplierlist}
-    return render(request, 'supplierlist.html', context)
+    if not request.user.is_authenticated:
+        return render(request, 'loginpage.html')
+    else:
+        supplierlist = Supplier.objects.all()
+        context = {'suppliers': supplierlist}
+        return render(request, 'supplierlist.html', context)
 
 def addsupplier(request):
     a = request.POST['companyname']
