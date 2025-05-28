@@ -1,5 +1,5 @@
 from django.shortcuts import render, redirect
-from .models import Supplier, Product
+from .models import Supplier, Product, Employee, Store
 from django.contrib.auth import authenticate, login, logout
 
 # LANDING AFTER LOGIN
@@ -129,3 +129,89 @@ def searchsuppliers(request):
     filtered = Supplier.objects.filter(companyname__icontains=search)
     context = {'suppliers': filtered}
     return render (request,"supplierlist.html",context)
+
+
+# EMPLOYEES 
+
+def employeeslistview(request):
+    employeelist = Employee.objects.all()
+    storelist = Store.objects.all()
+    context = {'employees': employeelist, 'stores': storelist}
+    return render(request, 'employeeslist.html', context)
+
+def addemployee(request):
+    a = request.POST['firstname']
+    b = request.POST['lastname']
+    c = request.POST['address']
+    d = request.POST['phone']
+    e = request.POST['email']
+    Employee(firstname = a, lastname = b, address = c, phone = d, email = e).save()
+    return redirect(request.META['HTTP_REFERER'])
+
+def confirmdeleteempolyee(request, id):
+    employee = Employee.objects.get(id = id)
+    context = {'employee': employee}
+    return render (request,"confirmdelemploy.html",context)
+
+def deleteemployee(request, id):
+    Employee.objects.get(id = id).delete()
+    return redirect(employeeslistview)
+
+def edit_employee_get(request, id):
+        employee = Employee.objects.get(id = id)
+        context = {'employee': employee}
+        return render (request,"edit_employee.html",context)
+
+
+def edit_employee_post(request, id):
+        item = Employee.objects.get(id = id)
+        item.address = request.POST['address']
+        item.phone = request.POST['phone']
+        item.email = request.POST['email']
+        item.save()
+        return redirect(employeeslistview)
+
+
+# STORES
+
+def storeslistview(request):
+    storelist = Store.objects.all()
+    employeelist = Employee.objects.all()
+    productlist = Product.objects.all()
+    context = {'stores': storelist, 'employees': employeelist, 'products': productlist}
+    return render(request, 'storeslist.html', context)
+
+def addstore(request):
+    a = request.POST['storename']
+    b = request.POST['contactname']
+    c = request.POST['address']
+    d = request.POST['phone']
+    e = request.POST['email']
+    f = request.POST['country']
+    Store(storename = a, contactname = b, address = c, phone = d, email = e, country = f).save()
+    return redirect(request.META['HTTP_REFERER'])
+
+def confirmdeletestore(request, id):
+    store = Store.objects.get(id = id)
+    context = {'store': store}
+    return render (request,"confirmdelstore.html",context)
+
+def deletestore(request, id):
+    Store.objects.get(id = id).delete()
+    return redirect(storeslistview)
+
+def edit_store_get(request, id):
+        store = Store.objects.get(id = id)
+        context = {'store': store}
+        return render (request,"edit_store.html",context)
+
+
+def edit_store_post(request, id):
+        item = Store.objects.get(id = id)
+        item.contactname = request.POST['contactname']
+        item.address = request.POST['address']
+        item.phone = request.POST['phone']
+        item.email = request.POST['email']
+        item.country = request.POST['country']
+        item.save()
+        return redirect(storeslistview)

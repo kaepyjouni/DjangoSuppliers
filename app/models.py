@@ -24,3 +24,29 @@ class Product(models.Model):
     # mutta se ei ole välttämätöntä alussa
     def __str__(self):
         return f"{self.productname} produced by {self.supplier.companyname}"
+
+class Employee(models.Model):
+    firstname = models.CharField(max_length = 50, default="Teppo")
+    lastname = models.CharField(max_length = 50, default="Testaaja")
+    address = models.CharField(max_length = 100, default="katu")
+    phone = models.CharField(max_length = 20, default="123")
+    email = models.CharField(max_length = 50, default="sposti")
+    # store = models.ForeignKey(Store, on_delete=models.CASCADE)
+    # ao:n voi tehdä jos haluaa että admin sivu toimii myöhemmässä vaiheessa paremmin,
+    # mutta se ei ole välttämätöntä alussa
+    def __str__(self):
+        return f"{self.firstname}"
+
+class Store(models.Model):
+    storename = models.CharField(max_length = 50, default="Kauppa")
+    contactname = models.CharField(max_length = 50, default="Heikki")
+    address = models.CharField(max_length = 100, default="katukatu")
+    phone = models.CharField(max_length = 20, default="1234")
+    email = models.CharField(max_length = 50, default="sahkoposti")
+    country = models.CharField(max_length = 50, default="Finland")
+    # product = models.ForeignKey(Product, on_delete=models.CASCADE)
+    # employee = models.ForeignKey(Employee, on_delete=models.CASCADE)
+    # ao:n voi tehdä jos haluaa että admin sivu toimii myöhemmässä vaiheessa paremmin,
+    # mutta se ei ole välttämätöntä alussa
+    def __str__(self):
+        return f"{self.storename} from {self.country}"

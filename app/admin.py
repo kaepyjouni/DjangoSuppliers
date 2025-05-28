@@ -3,7 +3,7 @@
 
 from django.contrib import admin
 
-from app.models import Supplier, Product
+from app.models import Supplier, Product, Employee, Store
 
 @admin.register(Product)
 class ProductAdmin(admin.ModelAdmin):
@@ -11,4 +11,12 @@ class ProductAdmin(admin.ModelAdmin):
 
 @admin.register(Supplier)
 class SupplierAdmin(admin.ModelAdmin):
+    pass
+
+@admin.register(Employee)
+class EmployeeAdmin(admin.ModelAdmin):
+    pass
+
+@admin.register(Store)
+class StoreAdmin(admin.ModelAdmin):
     pass
