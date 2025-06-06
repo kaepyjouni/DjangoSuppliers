@@ -25,7 +25,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-co*a&qtczydyqv$tl1t9$&@z*s$uf6$6_wva3wyh9kt0wo)f13'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
 ALLOWED_HOSTS = ['*']
 
@@ -88,25 +88,25 @@ WSGI_APPLICATION = 'suppliers.wsgi.application'
 
 # LOKAALI PostgreSQL TIETOKANTA
 # *****************
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'suppliers_db',
-        'USER': 'postgres',
-        'PASSWORD': 'asd',
-        'HOST': 'localhost',
-        'PORT': '5432'
-    }
-}
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.postgresql',
+#         'NAME': 'suppliers_db',
+#         'USER': 'postgres',
+#         'PASSWORD': 'asd',
+#         'HOST': 'localhost',
+#         'PORT': '5432'
+#     }
+# }
 
 # Render käytössä
-# DATABASES = {
-#     'default': dj_database_url.config(
-#         # Replace this value with your local database's connection string.
-#         default='postgresql://postgres:postgres@localhost:5432/suppliersdb',
-#         conn_max_age=600
-#     )
-# }
+DATABASES = {
+    'default': dj_database_url.config(
+        # Replace this value with your local database's connection string.
+        default='postgresql://postgres:postgres@localhost:5432/suppliersdb',
+        conn_max_age=600
+    )
+}
 
 
 # Password validation

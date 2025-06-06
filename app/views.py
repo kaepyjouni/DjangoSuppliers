@@ -1,4 +1,4 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from .models import Supplier, Product, Employee, Store
 from django.contrib.auth import authenticate, login, logout
 
@@ -34,7 +34,8 @@ def productlistview(request):
     else:
         productlist = Product.objects.all()
         supplierlist = Supplier.objects.all()
-        context = {'products': productlist, 'suppliers': supplierlist}
+        storelist = Store.objects.all()
+        context = {'products': productlist, 'suppliers': supplierlist, 'stores': storelist}
         return render(request, 'productlist.html', context)
 
 def addproduct(request):
@@ -43,8 +44,9 @@ def addproduct(request):
     c = request.POST['unitprice']
     d = request.POST['unitsinstock']
     e = request.POST['supplier']
-    
-    Product(productname = a, packagesize = b, unitprice = c, unitsinstock = d, supplier = Supplier.objects.get(id = e)).save()
+    f = request.POST['store']
+
+    Product(productname = a, packagesize = b, unitprice = c, unitsinstock = d, store = Store.objects.get(id = f), supplier = Supplier.objects.get(id = e)).save()
     return redirect(request.META['HTTP_REFERER'])
 
 def confirmdeleteproduct(request, id):
@@ -75,6 +77,18 @@ def products_filtered(request, id):
     filteredproducts = productlist.filter(supplier = id)
     context = {'products': filteredproducts}
     return render (request,"productlist.html",context)
+
+def products_by_store(request, id):
+    products = Product.objects.filter(store_id=id)
+    suppliers = Supplier.objects.all()
+    stores = Store.objects.all()
+    store = get_object_or_404(Store, pk=id)
+    return render(request, "productlist.html", {
+        "products": products,
+        "suppliers": suppliers,
+        "stores": stores,
+        "filtered_by": f"Store: {store.storename}"
+    })
 
 
 

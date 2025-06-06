@@ -19,12 +19,19 @@
         <h5 class="card-text">Supplier: {{p.supplier.companyname}}</h5>
         <p class="card-text">packagesize: {{p.packagesize}} | unitprice: {{p.unitprice}}</p>
         <p class="card-text" style="color: green;">Units in stock: {{p.unitsinstock}}</p>
+        <p class="card-text" style="color: purple;">Store: {{p.store.storename}}</p>
         <a href="/edit-product-get/{{p.id}}/" class="btn btn-primary">Edit</a>
 
         <a href="/confirm-delete-product/{{p.id}}/" class="btn btn-danger">Delete</a>
 
         <a href="/products-by-supplier/{{p.supplier.id}}/" class="btn btn-secondary">{{p.supplier.companyname}}´s all
             Products</a>
+
+        <!-- Store button -->
+        <a href="{% url 'products_by_store' p.store.id %}" class="btn btn-outline-secondary btn-sm">
+            {{ p.store.storename }}'s Products
+        </a>
+
 
     </div>
 </div>
@@ -60,6 +67,15 @@
                 {% for s in suppliers %}
                   <option value="{{s.id}}">{{s.companyname}}</option>
                   {% endfor %}
+                </select>
+                <br />
+                <label for="store">Store</label>
+                <select id="store" name="store" required>
+                    {% for s in stores %}
+                        <option value="{{ s.id }}">{{ s.storename }}</option>   {# ← value = id #}
+                    {% empty %}
+                        <option disabled>-- no stores --</option>
+                    {% endfor %}
                 </select>
 
                 <br/>
