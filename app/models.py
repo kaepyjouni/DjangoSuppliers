@@ -44,7 +44,6 @@ class Employee(models.Model):
     address = models.CharField(max_length = 100, default="katu")
     phone = models.CharField(max_length = 20, default="123")
     email = models.CharField(max_length = 50, default="sposti")
-    # store = models.ForeignKey(Store, on_delete=models.CASCADE, null=True, blank=True)
     # ao:n voi tehdä jos haluaa että admin sivu toimii myöhemmässä vaiheessa paremmin,
     # mutta se ei ole välttämätöntä alussa
     def __str__(self):

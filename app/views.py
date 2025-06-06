@@ -38,16 +38,44 @@ def productlistview(request):
         context = {'products': productlist, 'suppliers': supplierlist, 'stores': storelist}
         return render(request, 'productlist.html', context)
 
-def addproduct(request):
-    a = request.POST['productname']
-    b = request.POST['packagesize']
-    c = request.POST['unitprice']
-    d = request.POST['unitsinstock']
-    e = request.POST['supplier']
-    f = request.POST['store']
+# def addproduct(request):
+#     a = request.POST['productname']
+#     b = request.POST['packagesize']
+#     c = request.POST['unitprice']
+#     d = request.POST['unitsinstock']
+#     e = request.POST['supplier']
+#     f = request.POST['store']
 
-    Product(productname = a, packagesize = b, unitprice = c, unitsinstock = d, store = Store.objects.get(id = f), supplier = Supplier.objects.get(id = e)).save()
-    return redirect(request.META['HTTP_REFERER'])
+#     Product(productname = a, packagesize = b, unitprice = c, unitsinstock = d, store = Store.objects.get(id = f), supplier = Supplier.objects.get(id = e)).save()
+#     return redirect(request.META['HTTP_REFERER'])
+
+def addproduct(request):
+    # sallitaan vain POST
+    if request.method != "POST":
+        return redirect("productlist")   # tai 405
+
+    # poimi kentät
+    name        = request.POST.get("productname")
+    size        = request.POST.get("packagesize")
+    price       = request.POST.get("unitprice")
+    stock       = request.POST.get("unitsinstock")
+    supplier_id = request.POST.get("supplier")
+    store_id    = request.POST.get("store")
+
+    # hae FK-objektit tai 404
+    supplier = get_object_or_404(Supplier, pk=supplier_id)
+    store    = get_object_or_404(Store,    pk=store_id)
+
+    # tallenna
+    Product.objects.create(
+        productname = name,
+        packagesize = size,
+        unitprice   = price,
+        unitsinstock= stock,
+        supplier    = supplier,
+        store       = store,
+    )
+    return redirect(request.META.get("HTTP_REFERER", "productlist"))
 
 def confirmdeleteproduct(request, id):
     product = Product.objects.get(id = id)
